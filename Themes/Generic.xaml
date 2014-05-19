@@ -1,0 +1,307 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fmm="clr-namespace:Frost.XamlControls"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:actions="clr-namespace:Frost.XamlControls.Actions"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:l="http://www.frostmediamanager.com/xaml/translation">
+    
+    <BitmapImage x:Key="GenericBox" UriSource="../Images/default/generic.png" />
+    <BitmapImage x:Key="DefaultCover" UriSource="../Images/default/cover.png" />
+
+    <Style TargetType="{x:Type fmm:ImageButton}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type fmm:ImageButton}">
+                    <Border BorderThickness="0.3" x:Name="border" BorderBrush="Transparent">
+                        <Image x:Name="ButtonImage" Source="{TemplateBinding EnabledSource}"
+                               MaxHeight="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ImageMaxHeight, FallbackValue={x:Static sys:Double.PositiveInfinity}, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="2,0,2,0" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ButtonImage" Property="Source"
+                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisabledSource}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Gray" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type fmm:ToggleImageButton}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type fmm:ToggleImageButton}">
+                    <Border BorderThickness="0.3" x:Name="border" BorderBrush="Transparent">
+                        <Image x:Name="ButtonImage" Source="{TemplateBinding EnabledSource}" Margin="2,0,2,0" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ButtonImage" Property="Source"
+                                    Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DisabledSource}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="True" />
+                                <Condition Property="IsChecked" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="ButtonImage" Property="Source"
+                                        Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CheckedSource}" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Gray" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type fmm:ChannelPicker}">
+        <Style.Resources>
+            <Style TargetType="{x:Type fmm:ToggleImageButton}">
+                <Setter Property="EnabledSource" Value="../Images/speaker_disabled.png" />
+                <Setter Property="DisabledSource" Value="../Images/speaker_disabled.png" />
+                <Setter Property="CheckedSource" Value="../Images/speaker.ico" />
+            </Style>
+
+            <Style x:Key="Woofer" TargetType="{x:Type fmm:ToggleImageButton}">
+                <Setter Property="EnabledSource" Value="../Images/woofer_disabled.png" />
+                <Setter Property="DisabledSource" Value="../Images/woofer_disabled.png" />
+                <Setter Property="CheckedSource" Value="../Images/woofer.ico" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type fmm:ChannelPicker}">
+                    <Grid DataContext="{Binding}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="43" />
+                            <RowDefinition Height="43" />
+                            <RowDefinition Height="43" />
+                            <RowDefinition Height="43" />
+                            <RowDefinition Height="43" />
+                            <RowDefinition Height="43" />
+                            <RowDefinition Height="44" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <fmm:ToggleImageButton Name="Woofer"
+                                               Tag="{x:Static fmm:Channel.LFE}"
+                                               Style="{StaticResource Woofer}"
+                                               Grid.Row="5" Grid.RowSpan="2" Grid.Column="0"
+                                               Grid.ColumnSpan="2"
+                                               Margin="0,10,10,0"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=Woofer}" 
+                                               />
+
+                        <fmm:ToggleImageButton Name="FrontCenter"
+                                               Tag="{x:Static fmm:Channel.FrontCenter}" Grid.Column="2"
+                                               Grid.Row="5" ToolTip="{l:T Front center channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=FrontCenter}"
+                                               />
+                        
+                        <fmm:ToggleImageButton Name="FrontLeft"
+                                               Tag="{x:Static fmm:Channel.FrontLeft}" Grid.Column="3"
+                                               Grid.Row="4" ToolTip="{l:T Front left channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=FrontLeft}" 
+                                               />
+                        
+                        <fmm:ToggleImageButton Name="FrontRight"
+                                               Tag="{x:Static fmm:Channel.FrontRight}" Grid.Column="1"
+                                               Grid.Row="4" ToolTip="{l:T Front right channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=FrontRight}"
+                                               />
+
+                        <Image Source="../Images/sofa.png" Grid.Column="2" Grid.Row="2" />
+
+                        <fmm:ToggleImageButton Name="SideRight"
+                                               Tag="{x:Static fmm:Channel.SideRight}" Grid.Column="4"
+                                               Grid.Row="2" ToolTip="{l:T Side left channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=SideRight}"
+                                               />
+                        
+                        <fmm:ToggleImageButton Name="SideLeft"
+                                               Tag="{x:Static fmm:Channel.SideLeft}" Grid.Column="0"
+                                               Grid.Row="2" ToolTip="{l:T Side right channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=SideLeft}"
+                                               />
+
+                        <fmm:ToggleImageButton Name="BackLeft"
+                                               Tag="{x:Static fmm:Channel.BackLeft}" Grid.Column="1"
+                                               Grid.Row="0" ToolTip="{l:T Back left channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=BackLeft}" 
+                                               />
+                        
+                        <fmm:ToggleImageButton Name="BackRight"
+                                               Tag="{x:Static fmm:Channel.BackRight}" Grid.Column="3"
+                                               Grid.Row="0" ToolTip="{l:T Back right channel}"
+                                               Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ChannelClickedCommand}"
+                                               CommandParameter="{Binding ElementName=BackRight}" 
+                                               />
+
+                        <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center">BR</TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center">BL</TextBlock>
+
+                        <TextBlock Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center">SL</TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">SR</TextBlock>
+
+                        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Bottom" HorizontalAlignment="Center">FL</TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">FR</TextBlock>
+                        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">FC</TextBlock>
+
+                        <TextBlock Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{l:T LFE}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type fmm:BoxArt}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type fmm:BoxArt}">
+                    <Grid>
+                        <Image Panel.ZIndex="2" Source="{Binding BoxImage, RelativeSource={RelativeSource TemplatedParent}, TargetNullValue={StaticResource GenericBox}}" Stretch="Fill">
+                            <Image.Effect>
+                                <DropShadowEffect Color="White" BlurRadius="1" Opacity="0.3" ShadowDepth="1" />
+                            </Image.Effect>
+                        </Image>
+
+                        <Image Name="CoverImage" Source="{Binding CoverImage, RelativeSource={RelativeSource TemplatedParent}, FallbackValue={StaticResource DefaultCover}, TargetNullValue={StaticResource DefaultCover}}"
+                               Margin="10,25,10,10" Panel.ZIndex="1" Stretch="Fill">
+                            <Image.CacheMode>
+                                <BitmapCache />
+                            </Image.CacheMode>
+                        </Image>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type fmm:StarRating}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type fmm:StarRating}">
+                    <Grid>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeave">
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseLeaveCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="Star1" Grid.Column="0" Source="../Images/Stars/starempty.png">
+                            <Image.Tag>
+                                <sys:Int32>1</sys:Int32>
+                            </Image.Tag>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseDownCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseMove">
+                                    <actions:EventToCommand Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseMoveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                        <Image x:Name="Star2" Grid.Column="1" Source="../Images/Stars/starempty.png">
+                            <Image.Tag>
+                                <sys:Int32>3</sys:Int32>
+                            </Image.Tag>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseDownCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseMove">
+                                    <actions:EventToCommand Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseMoveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                        <Image x:Name="Star3" Grid.Column="2" Source="../Images/Stars/starempty.png">
+                            <Image.Tag>
+                                <sys:Int32>5</sys:Int32>
+                            </Image.Tag>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseDownCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseMove">
+                                    <actions:EventToCommand Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseMoveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                        <Image x:Name="Star4" Grid.Column="3" Source="../Images/Stars/starempty.png">
+                            <Image.Tag>
+                                <sys:Int32>7</sys:Int32>
+                            </Image.Tag>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseDownCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseMove">
+                                    <actions:EventToCommand Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseMoveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                        <Image x:Name="Star5" Grid.Column="4" Source="../Images/Stars/starempty.png">
+                            <Image.Tag>
+                                <sys:Int32>9</sys:Int32>
+                            </Image.Tag>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseDownCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseMove">
+                                    <actions:EventToCommand Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=MouseMoveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Image>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

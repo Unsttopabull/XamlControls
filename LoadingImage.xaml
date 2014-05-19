@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="Frost.XamlControls.LoadingImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lc="clr-namespace:LoadingControl;assembly=LoadingControl"
+             mc:Ignorable="d" x:Name="LoadingImageControl"
+             d:DesignHeight="300" d:DesignWidth="300" Width="Auto" Height="Auto">
+    <!--<Border Background="Black" Opacity="0.2">-->
+        <Grid x:Name="Grid" Width="Auto" Height="Auto">
+            <lc:LoadingAnimation HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 DataContext="{Binding ElementName=LoadingImageControl}"
+                                 LoadingText="{Binding LoadingText, FallbackValue=Loading..., TargetNullValue=Loading...}"
+                                 x:Name="Spinner" Width="{Binding ImageWidth}" Height="{Binding ImageHeight}"
+                                 MaxHeight="{Binding ImageMaxHeight}" MaxWidth="{Binding ImageMaxWidth}" />
+
+            <Image Source="{Binding ElementName=LoadingImageControl, Path=ImageSource}"
+                   DataContext="{Binding ElementName=LoadingImageControl}"
+                   Width="{Binding ImageWidth}" Height="{Binding ImageHeight}" Stretch="{Binding Stretch}"
+                   MaxHeight="{Binding ImageMaxHeight}" MaxWidth="{Binding ImageMaxWidth}" />
+
+        </Grid>
+    <!--</Border>-->
+</UserControl>
